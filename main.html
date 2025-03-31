@@ -1,16 +1,139 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Tic Tac Toe</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+            width: 320px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: pink;
+            border: 2px solid black;
+            font-size: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .winner {
+            background-color: purple;
+            color: white;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div id="playerInput">
+            <label>Player 1: <input type="text" id="player-1" placeholder="Enter name"></label>
+            <label>Player 2: <input type="text" id="player-2" placeholder="Enter name"></label>
+            <button id="submit">Start Game</button>
+        </div>
+        <div id="gameBoard" style="display: none;">
+            <h2 class="message" id="message"></h2>
+            <div class="board" id="board"></div>
+            <button id="reset" style="display: none;">Restart Game</button>
+        </div>
+    </div>
 
+    <script>
+        const board = document.getElementById("board");
+        const message = document.getElementById("message");
+        const startBtn = document.getElementById("submit");
+        const resetBtn = document.getElementById("reset");
+        let player1, player2;
+        let currentPlayer, currentMarker;
+        let gameActive = false;
+        let cells = [];
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        startBtn.addEventListener("click", () => {
+            player1 = document.getElementById("player-1").value || "Player 1";
+            player2 = document.getElementById("player-2").value || "Player 2";
+            currentPlayer = player1;
+            currentMarker = "X";
+            document.getElementById("playerInput").style.display = "none";
+            document.getElementById("gameBoard").style.display = "block";
+            message.innerText = `${currentPlayer}, you're up!`;
+            initializeBoard();
+        });
+
+        function initializeBoard() {
+            board.innerHTML = "";
+            cells = [];
+            gameActive = true;
+            for (let i = 0; i < 9; i++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.setAttribute("id", i);
+                cell.addEventListener("click", handleMove, { once: true });
+                board.appendChild(cell);
+                cells.push(cell);
+            }
+        }
+
+        function handleMove(event) {
+            if (!gameActive) return;
+            let cell = event.target;
+            cell.innerText = currentMarker;
+
+            if (checkWin()) {
+                message.innerText = `${currentPlayer}, congratulations you won!`;
+                highlightWinner();
+                gameActive = false;
+                resetBtn.style.display = "block";
+                return;
+            }
+
+            switchPlayer();
+        }
+
+        function switchPlayer() {
+            currentPlayer = (currentPlayer === player1) ? player2 : player1;
+            currentMarker = (currentMarker === "X") ? "O" : "X";
+            message.innerText = `${currentPlayer}, you're up!`;
+        }
+
+        function checkWin() {
+            return winPatterns.some(pattern => {
+                if (
+                    cells[pattern[0]].innerText === currentMarker &&
+                    cells[pattern[1]].innerText === currentMarker &&
+                    cells[pattern[2]].innerText === currentMarker
+                ) {
+                    pattern.forEach(index => cells[index].classList.add("winner"));
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        resetBtn.addEventListener("click", () => {
+            document.getElementById("playerInput").style.display = "block";
+            document.getElementById("gameBoard").style.display = "none";
+            resetBtn.style.display = "none";
+        });
+    </script>
 </body>
-
 </html>
+
