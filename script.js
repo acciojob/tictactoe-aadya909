@@ -18,10 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ];
         
         gameDiv.style.display = "block";
-        message.textContent = ${players[0]}, you're up!;
+        message.textContent = `${players[0]}, you're up!`;
         gameActive = true;
-
-        // Reset board
+        //Reset board
         boardState.fill("");
         boardCells.forEach(cell => {
             cell.textContent = "";
@@ -39,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => {
                 if (checkWinner()) {
-                    message.textContent = ${currentPlayer === "x" ? players[0] : players[1]} congratulations you won!;
+                    message.textContent =`${currentPlayer === "x" ? players[0] : players[1]} congratulations you won!`;
                     gameActive = false;
                     return;
                 }
 
                 currentPlayer = currentPlayer === "x" ? "o" : "x";
-                message.textContent = ${currentPlayer === "x" ? players[0] : players[1]}, you're up!;
+                message.textContent = `${currentPlayer === "x" ? players[0] : players[1]}, you're up!`;
             }, 50);
         });
     });
