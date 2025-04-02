@@ -13,8 +13,8 @@
         ];
 
         startBtn.addEventListener("click", () => {
-            player1 = document.getElementById("player-1").value || "Player 1";
-            player2 = document.getElementById("player-2").value || "Player 2";
+            player1 = document.getElementById("#player-1").value || "Player 1";
+            player2 = document.getElementById("#player-2").value || "Player 2";
             currentPlayer = player1;
             currentMarker = "X";
             document.getElementById("playerInput").style.display = "none";
